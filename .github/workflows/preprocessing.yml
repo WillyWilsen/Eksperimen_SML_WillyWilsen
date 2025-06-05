@@ -1,0 +1,35 @@
+name: Preprocess Dataset Automatically
+
+on:
+  push:
+    paths:
+      - "InstitusiPendidikan_raw.csv"
+      - "preprocessing/automate_WillyWilsen.py"
+  workflow_dispatch:
+
+jobs:
+  preprocess:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Install Dependencies
+        run: |
+          pip install pandas numpy joblib
+
+      - name: Run Preprocessing Script
+        run: |
+          python preprocessing/automate_WillyWilsen.py
+
+      - name: Upload Preprocessed Dataset
+        uses: actions/upload-artifact@v4
+        with:
+          name: InstitusiPendidikan_preprocessing
+          path: preprocessing/InstitusiPendidikan_preprocessing.csv
